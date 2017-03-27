@@ -20,8 +20,19 @@ var main = function() {
 
     mRequest.open("GET", url, true);
     mRequest.send();
+
+    var mImages = [];
     
     function initGalleryImage(json) {
+        var counter = 0;
+        for(var obj in json) {
+            var imgMetaData = new Object();
+            imgMetaData.location = obj[1];
+            imgMetaData.description = obj[2];
+            imgMetaData.date = obj[3];
+            imgMetaData.img = obj[0];
+            mImages[counter++] = imgMetaData;
+        }
     }
 
 
