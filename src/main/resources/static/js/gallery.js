@@ -33,7 +33,10 @@ function animate() {
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
 function swapPhoto() {
-    $('#photo').attr('src',mImages[mCurrentIndex].path)
+    $('#photo').attr('src',mImages[mCurrentIndex].path);
+    $('.location').text("Location: " + mImages[mCurrentIndex].location);
+    $('.description').text("Description: " + mImages[mCurrentIndex].description);
+    $('.date').text("Date: " + mImages[mCurrentIndex].date);
 	//Add code here to access the #slideShow element.
 	//Access the img element and replace its source
 	//with a new image from your images array which is loaded 
@@ -66,6 +69,10 @@ $(document).ready( function() {
 	
 	// This initially hides the photos' metadata information
 	$('.details').eq(0).hide();
+
+	$('.moreIndicator').click(function () {
+       $('.details').toggle();
+    });
 	
 });
 
