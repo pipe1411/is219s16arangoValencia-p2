@@ -33,6 +33,7 @@ function animate() {
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
 function swapPhoto() {
+    $('.thumbnail')
 	//Add code here to access the #slideShow element.
 	//Access the img element and replace its source
 	//with a new image from your images array which is loaded 
@@ -43,18 +44,11 @@ function swapPhoto() {
 // Counter for the mImages array
 var mCurrentIndex = 0;
 
-// XMLHttpRequest variable
 var mRequest = new XMLHttpRequest();
-
-// Array holding GalleryImage objects (see below).
+var mUrl = "images.json";
 var mImages = [];
+readJson();
 
-// Holds the retrived JSON information
-var mJson;
-
-// URL for the JSON to load by default
-// Some options for you are: images.json, images.short.json; you will need to create your own extra.json later
-var mUrl = 'insert_url_here_to_image_json';
 
 
 //You can optionally use the following function as your event callback for loading the source of Images from your json data (for HTMLImageObject).
@@ -79,10 +73,27 @@ window.addEventListener('load', function() {
 
 }, false);
 
-function GalleryImage() {
-	//implement me as an object to hold the following data about an image:
-	//1. location where photo was taken
-	//2. description of photo
-	//3. the date when the photo was taken
-	//4. either a String (src URL) or an an HTMLImageObject (bitmap of the photo. https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement)
+function GalleryImage(location,description,date,path) {
+	this.location = location;
+	this.description = description;
+	this.date = date;
+	this.path = path;
+}
+
+function initGalleryImage(json) {
+    for(var i = 0; i < json.images.length; i++) {
+        mImages[i] = new GalleryImage(json.images[i].imgLocation,json.images[i].description, json.images[i].date,json.images[i].imgPath);
+    }
+}
+
+function readJson() {
+    mRequest.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var json = JSON.parse(this.responseText);
+            initGalleryImage(json);
+        }
+    }
+
+    mRequest.open("GET", mUrl, true);
+    mRequest.send();
 }
