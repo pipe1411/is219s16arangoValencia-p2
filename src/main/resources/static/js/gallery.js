@@ -16,7 +16,7 @@
 animate();
 
 var mLastFrameTime = 0;
-var mWaitTime = 5000; //time in ms
+var mWaitTime = 10000; //time in ms
 function animate() {
     requestAnimFrame( animate );
 	var currentTime = new Date().getTime();
@@ -33,18 +33,21 @@ function animate() {
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
 function swapPhoto() {
-    $('#photo').attr('src',mImages[mCurrentIndex].path)
-	//Add code here to access the #slideShow element.
-	//Access the img element and replace its source
-	//with a new image from your images array which is loaded 
-	//from the JSON string
+    $('#photo').attr('src',mImages[indexToLoad].path);
+    $('.location').text("Location: " + mImages[indexToLoad].location);
+    $('.description').text("Description: " + mImages[indexToLoad].description);
+    $('.date').text("Date: " + mImages[indexToLoad].date);
 	console.log('swap photo');
-    mCurrentIndex++;
 
+	mCurrentIndex = indexToLoad;
+    indexToLoad++;
+    if(indexToLoad == mImages.length)
+         indexToLoad = 0;
 }
 
 // Counter for the mImages array
 var mCurrentIndex = 0;
+var indexToLoad = 0;
 
 var mRequest = new XMLHttpRequest();
 var mUrl = "images.json";
@@ -66,6 +69,26 @@ $(document).ready( function() {
 	
 	// This initially hides the photos' metadata information
 	$('.details').eq(0).hide();
+
+	$('.moreIndicator').click(function () {
+       $('.details').toggle();
+    });
+
+	$('#prevPhoto').click(function () {
+	    if(mCurrentIndex == 0)
+            indexToLoad = mImages.length - 1;
+        else
+            indexToLoad = mCurrentIndex - 1;
+        swapPhoto();
+    });
+
+    $('#nextPhoto').click(function () {
+        if(mCurrentIndex == mImages.length - 1)
+            indexToLoad = 0;
+        else
+            indexToLoad++;
+        swapPhoto();
+    });
 	
 });
 
