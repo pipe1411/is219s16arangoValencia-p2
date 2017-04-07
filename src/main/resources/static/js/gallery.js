@@ -16,7 +16,7 @@
 animate();
 
 var mLastFrameTime = 0;
-var mWaitTime = 10000; //time in ms
+var mWaitTime = 100000; //time in ms
 function animate() {
     requestAnimFrame( animate );
 	var currentTime = new Date().getTime();
@@ -33,6 +33,22 @@ function animate() {
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
 function swapPhoto() {
+    // $('#photo').fadeOut(function () {
+    //     $(this).attr('src',mImages[indexToLoad].path).fadeIn(600);
+    //  });
+    // $('.location').fadeOut(function () {
+    //     $(this).text("Location: " + mImages[indexToLoad].location).fadeIn(600);
+    // });
+    // $('.description').fadeOut(function () {
+    //     $(this).text("Description: " + mImages[indexToLoad].description).fadeIn(600);
+    // });
+    // $('.date').fadeOut(function () {
+    //     $(this).text("Date: " + mImages[indexToLoad].date).fadeIn(600);
+    console.log(indexToLoad);
+
+    if(indexToLoad == mImages.length)
+        indexToLoad = 0;
+
     $('#photo').attr('src',mImages[indexToLoad].path);
     $('.location').text("Location: " + mImages[indexToLoad].location);
     $('.description').text("Description: " + mImages[indexToLoad].description);
@@ -71,7 +87,15 @@ $(document).ready( function() {
 	$('.details').eq(0).hide();
 
 	$('.moreIndicator').click(function () {
-       $('.details').toggle();
+       $('.details').fadeToggle();
+       if($(this).hasClass('rot90')){
+           $(this).removeClass('rot90');
+           $(this).addClass('rot270');
+       }
+       else if($(this).hasClass('rot270')) {
+           $(this).removeClass('rot270');
+           $(this).addClass('rot90');
+       }
     });
 
 	$('#prevPhoto').click(function () {
@@ -86,7 +110,7 @@ $(document).ready( function() {
         if(mCurrentIndex == mImages.length - 1)
             indexToLoad = 0;
         else
-            indexToLoad++;
+            indexToLoad = mCurrentIndex+1;
         swapPhoto();
     });
 	
