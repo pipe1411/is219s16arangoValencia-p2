@@ -66,9 +66,13 @@ var mCurrentIndex = 0;
 var indexToLoad = 0;
 
 var mRequest = new XMLHttpRequest();
-var mUrl = "images.json";
+var $_GET = getQueryParams(document.location.search);
+var mUrl = $_GET['json'];
 var mImages = [];
+if(!UrlExists(mUrl))
+    mUrl = "images.json";
 readJson();
+
 
 
 
@@ -146,3 +150,23 @@ function readJson() {
     mRequest.open("GET", mUrl, true);
     mRequest.send();
 }
+
+function getQueryParams(qs) {
+    qs = qs.split("+").join(" ");
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])]
+            = decodeURIComponent(tokens[2]);
+    }
+    return params;
+}
+
+function UrlExists(url) {
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    return http.status!=404;
+}
+
