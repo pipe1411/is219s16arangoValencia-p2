@@ -16,7 +16,7 @@
 animate();
 
 var mLastFrameTime = 0;
-var mWaitTime = 100000; //time in ms
+var mWaitTime = 5000; //time in ms
 function animate() {
     requestAnimFrame( animate );
 	var currentTime = new Date().getTime();
@@ -31,36 +31,6 @@ function animate() {
 }
 
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
-
-function swapPhoto() {
-    // $('#photo').fadeOut(function () {
-    //     $(this).attr('src',mImages[indexToLoad].path).fadeIn(600);
-    //  });
-    // $('.location').fadeOut(function () {
-    //     $(this).text("Location: " + mImages[indexToLoad].location).fadeIn(600);
-    // });
-    // $('.description').fadeOut(function () {
-    //     $(this).text("Description: " + mImages[indexToLoad].description).fadeIn(600);
-    // });
-    // $('.date').fadeOut(function () {
-    //     $(this).text("Date: " + mImages[indexToLoad].date).fadeIn(600);
-    console.log(indexToLoad);
-
-    if(indexToLoad == mImages.length)
-        indexToLoad = 0;
-
-    $('#photo').attr('src',mImages[indexToLoad].path);
-    $('.location').text("Location: " + mImages[indexToLoad].location);
-    $('.description').text("Description: " + mImages[indexToLoad].description);
-    $('.date').text("Date: " + mImages[indexToLoad].date);
-	console.log('swap photo');
-
-	mCurrentIndex = indexToLoad;
-    indexToLoad++;
-    if(indexToLoad == mImages.length)
-         indexToLoad = 0;
-}
-
 // Counter for the mImages array
 var mCurrentIndex = 0;
 var indexToLoad = 0;
@@ -75,19 +45,7 @@ readJson();
 
 
 
-
-//You can optionally use the following function as your event callback for loading the source of Images from your json data (for HTMLImageObject).
-//@param A GalleryImage object. Use this method for an event handler for loading a gallery Image object (optional).
-function makeGalleryImageOnloadCallback(galleryImage) {
-	return function(e) {
-		galleryImage.img = e.target;
-		mImages.push(galleryImage);
-	}
-}
-
 $(document).ready( function() {
-	
-	// This initially hides the photos' metadata information
 	$('.details').eq(0).hide();
 
 	$('.moreIndicator').click(function () {
@@ -126,13 +84,6 @@ window.addEventListener('load', function() {
 
 }, false);
 
-function GalleryImage(location,description,date,path) {
-	this.location = location;
-	this.description = description;
-	this.date = date;
-	this.path = path;
-}
-
 function initGalleryImage(json) {
     for(var i = 0; i < json.images.length; i++) {
         mImages[i] = new GalleryImage(json.images[i].imgLocation,json.images[i].description, json.images[i].date,json.images[i].imgPath);
@@ -146,7 +97,6 @@ function readJson() {
             initGalleryImage(json);
         }
     }
-
     mRequest.open("GET", mUrl, true);
     mRequest.send();
 }
@@ -168,5 +118,28 @@ function UrlExists(url) {
     http.open('HEAD', url, false);
     http.send();
     return http.status!=404;
+}
+
+function swapPhoto() {
+    if(indexToLoad == mImages.length)
+        indexToLoad = 0;
+
+    $('#photo').attr('src',mImages[indexToLoad].path);
+    $('.location').text("Location: " + mImages[indexToLoad].location);
+    $('.description').text("Description: " + mImages[indexToLoad].description);
+    $('.date').text("Date: " + mImages[indexToLoad].date);
+    console.log('swap photo');
+
+    mCurrentIndex = indexToLoad;
+    indexToLoad++;
+    if(indexToLoad == mImages.length)
+        indexToLoad = 0;
+}
+
+function GalleryImage(location,description,date,path) {
+    this.location = location;
+    this.description = description;
+    this.date = date;
+    this.path = path;
 }
 
